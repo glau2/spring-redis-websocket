@@ -1,7 +1,5 @@
 package com.github.rawsanj.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -12,19 +10,16 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-	private static final Logger log = LoggerFactory.getLogger(WebSocketConfig.class);
-
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry
-			.addEndpoint("/redis-chat")
-			.setAllowedOrigins("*")
-			.withSockJS();
+		registry.addEndpoint("/redis-chat").setAllowedOrigins("*").withSockJS();
 	}
 
 	@Override
