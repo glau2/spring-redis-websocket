@@ -16,7 +16,6 @@ public class ApplicationProperties {
 	@Setter
 	public static class Topic {
 		private String message;
-		private String count;
 	}
 
 }

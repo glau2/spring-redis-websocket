@@ -3,7 +3,6 @@ $(document).ready(function () {
 	$('.alert').hide();
 
 	var stompClient = null;
-	var messageCount = 0;
 	var rowCount = 0;
 
 	function setConnected(connected) {
@@ -29,16 +28,11 @@ $(document).ready(function () {
 				console.log("Message: ", chatMessage);
 				showChatMessage(JSON.parse(chatMessage.body));
 			});
-			stompClient.subscribe('/topic/count', function (totalCount) {
-				console.log("Total: ", totalCount.body);
-				setMessageCount(totalCount.body);
-			});
 			callback();
 		}, function (message) {
 			disconnect();
 			$('.alert').show();
 		});
-		$("#messageCount").text(messageCount);
 	}
 
 	function disconnect() {
@@ -47,12 +41,7 @@ $(document).ready(function () {
 		}
 		setConnected(false);
 		console.log("Disconnected");
-		messageCount = 0;
 		rowCount = 0;
-	}
-
-	function setMessageCount(totalCount) {
-		$("#message-count").text(totalCount);
 	}
 
 	function showChatMessage(chatMessage) {

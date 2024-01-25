@@ -4,32 +4,29 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.support.atomic.RedisAtomicInteger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.rawsanj.model.ChatMessage;
 
-@Controller
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RestController
 public class MessageController {
 
-	private static final Logger log = LoggerFactory.getLogger(MessageController.class);
-
-	private final RedisAtomicInteger chatMessageCounter;
+	private final AtomicInteger idCounter = new AtomicInteger(1);
 	private final StringRedisTemplate stringRedisTemplate;
 
-	public MessageController(RedisAtomicInteger chatMessageCounter, StringRedisTemplate stringRedisTemplate) {
-		this.chatMessageCounter = chatMessageCounter;
+	public MessageController(StringRedisTemplate stringRedisTemplate) {
 		this.stringRedisTemplate = stringRedisTemplate;
 	}
 
@@ -41,7 +38,6 @@ public class MessageController {
 	}
 
 	@PostMapping("/message")
-	@ResponseBody
 	public ResponseEntity<Map<String, String>> sendHttpChatHttpMessage(@RequestBody Map<String, String> message)
 			throws JsonProcessingException {
 		String httpMessage = message.get("message");
@@ -56,7 +52,7 @@ public class MessageController {
 
 	private void publishMessageToRedis(String message) throws JsonProcessingException {
 
-		Integer totalChatMessage = chatMessageCounter.incrementAndGet();
+		Integer totalChatMessage = idCounter.incrementAndGet();
 		String hostName = null;
 		try {
 			hostName = InetAddress.getLocalHost().getHostName();
@@ -71,7 +67,6 @@ public class MessageController {
 
 		// Publish Message to Redis Channels
 		stringRedisTemplate.convertAndSend("chat", chatString);
-		stringRedisTemplate.convertAndSend("count", totalChatMessage.toString());
 
 	}
 }

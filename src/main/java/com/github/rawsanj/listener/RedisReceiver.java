@@ -23,16 +23,9 @@ public class RedisReceiver {
 		ObjectMapper objectMapper = new ObjectMapper();
 		ChatMessage chatMessage = objectMapper.readValue(message, ChatMessage.class);
 
-		log.info("Notification Message Received: " + chatMessage);
+		log.info("Notification Message Received: {}", chatMessage);
 		webSocketMessageService.sendChatMessage(chatMessage);
 
 	}
 
-	// Invoked when message is publish to "count" channel
-	public void receiveCountMessage(String totalMessageCount) {
-
-		log.info("Count Message Received :" + totalMessageCount);
-		webSocketMessageService.sendMessageCount(Integer.parseInt(totalMessageCount));
-
-	}
 }
