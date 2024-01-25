@@ -3,23 +3,21 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<parent>
+		<groupId>com.privetechnologies</groupId>
+		<artifactId>prive-dependencies</artifactId>
+		<version>2024-01-24.master-10</version>
+	</parent>
+
 	<groupId>com.github.rawsanj</groupId>
 	<artifactId>spring-redis-websocket</artifactId>
 	<version>2.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>spring-redis-websocket</name>
-	<description>Spring Boot Project for WebSocket Notification/Chat using Redis Pub/Sub - Java 11</description>
-
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.0.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<registry.image.name>rawsanj/spring-redis-websocket</registry.image.name>
 	</properties>
 
